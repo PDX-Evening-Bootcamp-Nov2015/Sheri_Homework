@@ -1,32 +1,49 @@
-import random
+from random import randint, shuffle
 
 class Die():
 
-    def __init__(self, color, brain, gun, feet, hold):
+    def __init__(self):
         self.color = color
-        self.brain = brain
-        self.gun = gun
-        self.feet = feet
-        self.hold = False
+        if color == 6:
+            self.sides = [["B"],["B"],["B"],["F"],["F"],["S"]]
+        elif color == 4:
+            self.sides = [["B"],["B"],["F"],["F"],["S"],["S"]]
+        elif color == 3:
+            self.sides = [["B"],["F"],["F"],["S"],["S"],["S"]]
+        shuffle(self.sides)
+        self.currentvalue = self.sides[0]
+
 
 class Game():
-    def __init__(self, whose_turn):
-        self.whose_turn = whose_turn
+    def __init__(self):
+        self.playernamelist = []
+        self.playerobjectlist = []
+        self.whose_turn = 0
         self.rownd = 0
-        self.green_die = 6
-        self.yellow_die = 4
-        self.red_die = 3
+        self.thirteen_dice = [6,6,6,6,6,6,4,4,4,4,3,3,3]
+        shuffle(self.thirteen_dice)
+        self.spent_dice = []
+        self.current_dice = []
+
+
+
+        # all_kw.remove(guess)
+        # found.append(guess)
 
 class Player():
-    def __init__(self, name, turn, current_shotguns, current_brains, brain_stash):
+    def __init__(self, name):
         self.name = name
-        self.turn = turn
-        self.current_shotguns = current_shotguns
-        self.current_brains = current_brains
-        self.brain_stash = brain_stash
+        self.turn = 0
+        self.current_shotguns = 0
+        self.current_brains = 0
+        self.brain_stash = 0
 
     def __str__(self):
         return "{}, Brains ={}".format(self.name, self.brain_stash)
+
+    def __repr__(self):
+        return "{}, Brains ={}".format(self.name, self.brain_stash)
+
 
 def game_setup():
     wanna_play = int(input("How many players? (Please enter a number between 1 and 6):"))
@@ -36,41 +53,37 @@ def game_setup():
         print("Sorry please enter a number between 1 and 6")
         game_setup()
 
-playernamelist = []
-playerobjectlist = []
 
 def name_setup(numberofplayers):
     for x in range(1, (numberofplayers + 1)):
         print ("Player number" + str(x))
         name = input("Please enter name:")
-        playernamelist.append(name)
-        assign_names_object(playernamelist)
+        gameobject.playernamelist.append(name)
+    assign_names_object(gameobject.playernamelist)
 
 def assign_names_object(playernamelist):
     for x in playernamelist:
-        y = Player(str(x), 0, 0, 0, 0)
-        playerobjectlist.append(y)
-# import pdb; pdb.set_trace()
+        gameobject.playerobjectlist.append(Player(str(x)))
+
+
+
+
+
+
+
+gameobject = Game()
 game_setup()
-
-print(playerobjectlist)
-# for c in playerobjectlist:
-#     print(c)
+print(gameobject.playerobjectlist[0].name)
 
 
-#
+# playerobjectlist[0].turn = 1
+# print(playerobjectlist[0].turn)
+
+
+
 # player_one_name = input("enter player one's name")
 # player_two_name = input("enter player two's name")
-#
-#
+
+
 # player_one = Player(player_one_name, 0, 0, 0, 0)
 # player_two = Player(player_two_name, 0, 0, 0, 0)
-#
-#
-# def roll_die():
-#     die_list=[g, g, g, g, g, g, y, y, y, y, r, r, r]
-#     chosen_die = shuffle(die_list)
-#     chosen_die.pop
-#
-# random.shuffle(game.the_cuo)
-# self.blah = game.blah[:3]
