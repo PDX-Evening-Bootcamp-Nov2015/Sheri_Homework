@@ -5,6 +5,7 @@ def main():
     gameobject = Game()
     gameobject.game_setup()
 
+
     # Loop through the steps of playing the game until someone wins
     while gameobject.gamestate != "WINNERFOUND":
         # first have them roll onces
@@ -15,7 +16,7 @@ def main():
             gameobject.check_game()
 
             # Ask if they want to roll again
-            if gameobject.ask_player() ==False:
+            if gameobject.ask_player() == False:
                 break
         # if no, go to next player turn
         gameobject.next_turn()
@@ -42,6 +43,9 @@ class Die():
         shuffle(self.sides)
         self.currentvalue = self.sides[0]
 
+    def __repr__(self):
+        return "{}".format(self.currentvalue)
+
 
 class Game():
     def __init__(self):
@@ -56,6 +60,8 @@ class Game():
         self.brains = []
         self.brainCount = 0
         self.shotguns = []
+
+
 
     def roll_dice(self):
 
@@ -75,14 +81,14 @@ class Game():
         for die in copy:
             die.roll()
             if die.currentvalue == ["B"]:
-                print("BRAINS")
                 self.brainCount += 1
                 self.brains.append(die)
                 self.current_dice.remove(die)
             elif die.currentvalue == ["S"]:
-                print("SHOTGUN")
                 self.shotguns.append(die)
                 self.current_dice.remove(die)
+
+
 
     def check_game(self):
         if len(self.shotguns) == 3:
@@ -102,15 +108,6 @@ class Game():
             ask_player()
 
 
-
-
-
-
-
-        #shuffle(thirteen_dice)
-
-
-
     def next_turn(self):
         if self.current_player < len(self.playerobjectlist)-1:
             self.current_player += 1
@@ -121,8 +118,8 @@ class Game():
         self.current_dice = []
 
     def game_setup(self):
-        self.cup = self.thirteen_dice[:]
-        print("GAME SETUP")
+        self.cup = self.thirteen_dice
+        shuffle(self.cup)
         wanna_play = int(input("How many players? (Please enter a number between 1 and 6):"))
         if wanna_play <= 6 and wanna_play != 0:
             self.name_setup(wanna_play)
@@ -137,9 +134,6 @@ class Game():
             name = input("Please enter name:")
             self.playerobjectlist.append(Player(name))
 
-
-        # all_kw.remove(guess)
-        # found.append(guess)
 
 class Player():
     def __init__(self, name):
@@ -173,24 +167,5 @@ def name_setup(numberofplayers):
 
 
 
-
-
-
-
-
-
-
 if __name__ == '__main__':
     main()
-
-# playerobjectlist[0].turn = 1
-# print(playerobjectlist[0].turn)
-
-
-
-# player_one_name = input("enter player one's name")
-# player_two_name = input("enter player two's name")
-
-
-# player_one = Player(player_one_name, 0, 0, 0, 0)
-# player_two = Player(player_two_name, 0, 0, 0, 0)
