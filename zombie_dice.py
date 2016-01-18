@@ -11,14 +11,14 @@ def main():
         # first have them roll onces
         while gameobject.gamestate != "CHANGETURN":
             gameobject.roll_dice()
-
             # Check game state
             gameobject.check_game()
-
+            # gameobject.ask_player()
             # Ask if they want to roll again
             if gameobject.ask_player() == False:
                 break
         # if no, go to next player turn
+
         gameobject.next_turn()
 
         ##in next turn tell the person it's their turn
@@ -58,7 +58,6 @@ class Game():
         self.current_dice = []
         self.cup = []
         self.brains = []
-        self.brainCount = 0
         self.shotguns = []
 
 
@@ -74,19 +73,34 @@ class Game():
                 self.cup = self.brains
                 self.brains = []
                 shuffle(self.cup)
+
+#takes used fie from cup and adds to current_dice
             self.current_dice.append(self.cup.pop())
             num -= 1
 
-        copy = self.current_dice
+#creates a copy of current dice
+        copy = self.current_dice[:]
+#for loop for the current dice copy, runs the die.roll function which determines
+#whether each die represents a foot, brain, or shotgun
         for die in copy:
             die.roll()
+#adjusts the brain count and brain list
             if die.currentvalue == ["B"]:
-                self.brainCount += 1
+                self.playerobjectlist[self.current_player].brainCount += 1
                 self.brains.append(die)
                 self.current_dice.remove(die)
+#adjusts the shotgun count
             elif die.currentvalue == ["S"]:
                 self.shotguns.append(die)
                 self.current_dice.remove(die)
+
+        print(str(self.playerobjectlist[self.current_player]))
+        print("You have just rolled,")
+        print(copy)
+        print("For this turn you have {} brains and {} shotguns".format(len(self.brains), len(self.shotguns)))
+        print("Total brains this game {}".format(self.playerobjectlist[self.current_player].brainCount))
+
+
 
 
 
@@ -94,7 +108,7 @@ class Game():
         if len(self.shotguns) == 3:
             print ("Sorry you just got shot.")
             self.gamestate = "CHANGETURN"
-        elif len(self.brains) == 13:
+        elif self.playerobjectlist[self.current_player].brainCount == 13:
             print ("You Won!!!")
             self.gamestate = "WINNERFOUND"
 
@@ -113,12 +127,14 @@ class Game():
             self.current_player += 1
         else:
             self.current_player = 0
-        self.cup = self.thirteen_dice
+        self.cup = self.thirteen_dice[:]
         shuffle(self.cup)
         self.current_dice = []
+        self.shotguns = []
+        self.brains = []
 
     def game_setup(self):
-        self.cup = self.thirteen_dice
+        self.cup = self.thirteen_dice[:]
         shuffle(self.cup)
         wanna_play = int(input("How many players? (Please enter a number between 1 and 6):"))
         if wanna_play <= 6 and wanna_play != 0:
@@ -139,15 +155,14 @@ class Player():
     def __init__(self, name):
         self.name = name
         self.turn = 0
-        self.current_shotguns = 0
-        self.current_brains = 0
-        self.brain_stash = 0
+        self.brainCount = 0
 
     def __str__(self):
-        return "{}, Brains ={}".format(self.name, self.brain_stash)
+        return "{}".format(self.name)
 
     def __repr__(self):
         return "{}, Brains ={}".format(self.name, self.brain_stash)
+
 
 
 def game_setup():
