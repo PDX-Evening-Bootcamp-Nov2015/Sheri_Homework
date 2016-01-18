@@ -8,20 +8,22 @@ def main():
 
     # Loop through the steps of playing the game until someone wins
     while gameobject.gamestate != "WINNERFOUND":
-        # first have them roll onces
-        while gameobject.gamestate != "CHANGETURN":
-            gameobject.roll_dice()
-            # Check game state
-            gameobject.check_game()
-            # gameobject.ask_player()
-            # Ask if they want to roll again
+        gameobject.roll_dice()
+        gameobject.check_game()
+        if gameobject.gamestate == "CHANGETURN":
+            gameobject.next_turn()
+            continue
+        elif gameobject.gamestate != "CHANGETURN":
             if gameobject.ask_player() == False:
-                break
-        # if no, go to next player turn
+                gameobject.next_turn()
+            else:
+                continue
 
-        gameobject.next_turn()
 
-        ##in next turn tell the person it's their turn
+
+
+
+
 
 
 
@@ -105,11 +107,13 @@ class Game():
 
 
     def check_game(self):
-        if len(self.shotguns) == 3:
-            print ("Sorry you just got shot.")
+        if len(self.shotguns) >= 3:
+            print ("You have been shot 3 times! YOUR TURN IS OVER")
             self.gamestate = "CHANGETURN"
-        elif self.playerobjectlist[self.current_player].brainCount == 13:
-            print ("You Won!!!")
+            self.playerobjectlist[self.current_player].brainCount = self.playerobjectlist[self.current_player].brainCount - len(self.brains)
+
+        elif self.playerobjectlist[self.current_player].brainCount >= 13:
+            print ("You Won!!! GAME OVER")
             self.gamestate = "WINNERFOUND"
 
     def ask_player(self):
@@ -132,6 +136,7 @@ class Game():
         self.current_dice = []
         self.shotguns = []
         self.brains = []
+        self.gamestate = 0
 
     def game_setup(self):
         self.cup = self.thirteen_dice[:]
