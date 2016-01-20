@@ -1,11 +1,9 @@
 from random import randint, shuffle
-
+import time
 
 def main():
     gameobject = Game()
     gameobject.game_setup()
-
-
     # Loop through the steps of playing the game until someone wins
     while gameobject.gamestate != "WINNERFOUND":
         gameobject.roll_dice()
@@ -19,16 +17,7 @@ def main():
             else:
                 continue
 
-
-
-
-
-
-
-
-
 class Die():
-
     def __init__(self, color):
         self.color = color
 
@@ -62,10 +51,7 @@ class Game():
         self.brains = []
         self.shotguns = []
 
-
-
     def roll_dice(self):
-
         # Figure out how many die we need
         num = 3 - len(self.current_dice)
         # Grab a new die for every die we're missing
@@ -75,11 +61,9 @@ class Game():
                 self.cup = self.brains
                 self.brains = []
                 shuffle(self.cup)
-
 #takes used fie from cup and adds to current_dice
             self.current_dice.append(self.cup.pop())
             num -= 1
-
 #creates a copy of current dice
         copy = self.current_dice[:]
 #for loop for the current dice copy, runs the die.roll function which determines
@@ -95,16 +79,13 @@ class Game():
             elif die.currentvalue == ["S"]:
                 self.shotguns.append(die)
                 self.current_dice.remove(die)
-
+        time.sleep(1)
         print(str(self.playerobjectlist[self.current_player]))
+        time.sleep(.5)
         print("You have just rolled,")
         print(copy)
         print("For this turn you have {} brains and {} shotguns".format(len(self.brains), len(self.shotguns)))
         print("Total brains this game {}".format(self.playerobjectlist[self.current_player].brainCount))
-
-
-
-
 
     def check_game(self):
         if len(self.shotguns) >= 3:
@@ -124,7 +105,6 @@ class Game():
             return False
         else:
             ask_player()
-
 
     def next_turn(self):
         if self.current_player < len(self.playerobjectlist)-1:
@@ -148,13 +128,11 @@ class Game():
             print("Sorry please enter a number between 1 and 6")
             game_setup()
 
-
     def name_setup(self, numberofplayers):
         for x in range(1, (numberofplayers + 1)):
             print ("Player number" + str(x))
             name = input("Please enter name:")
             self.playerobjectlist.append(Player(name))
-
 
 class Player():
     def __init__(self, name):
@@ -168,8 +146,6 @@ class Player():
     def __repr__(self):
         return "{}, Brains ={}".format(self.name, self.brain_stash)
 
-
-
 def game_setup():
     wanna_play = int(input("How many players? (Please enter a number between 1 and 6):"))
     if wanna_play <= 6 and wanna_play != 0:
@@ -178,14 +154,11 @@ def game_setup():
         print("Sorry please enter a number between 1 and 6")
         game_setup()
 
-
 def name_setup(numberofplayers):
     for x in range(1, (numberofplayers + 1)):
         print ("Player number" + str(x))
         name = input("Please enter name:")
         gameobject.playerobjectlist.append(Player(name))
-
-
 
 if __name__ == '__main__':
     main()
